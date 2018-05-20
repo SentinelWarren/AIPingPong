@@ -12,11 +12,15 @@ var paddleX = 400;
 
 var canvas, canvasContext;
 
+var mouseX = 0;
+var mouseY = 0;
+
 function updateMousePosition(evt) {
     var rect = canvas.getBoundingClientRect();
     var root = document.documentElement;
 
-    var mouseX = evt.clientX - rect.left -root.scrollLeft;
+    mouseX = evt.clientX - rect.left - root.scrollLeft;
+    mouseY = evt.clientY - rect.top - root.scrollTop;
 
     paddleX = mouseX - PADDLE_WIDTH;
 }
@@ -90,6 +94,8 @@ function drawAll() {
 
     colorRect(paddleX, canvas.height - PADDLE_EDGE_DIST, PADDLE_WIDTH,PADDLE_THICKNESS, '#17252A');
 
+    colorText(mouseX+","+mouseY, mouseX,mouseY, 'green')
+
 }
 
 function colorRect(topLeftX,topLeftY, boxWidth,boxHeight, fillColor) {
@@ -103,4 +109,9 @@ function colorCircle(centerX,centerY, radius, fillColor) {
     canvasContext.arc(centerX,centerY, radius, 0,Math.PI*2, true);
     canvasContext.fill();
 
+}
+
+function colorText(showWords, textX,textY, fillColor) {
+    canvasContext.fillStyle = fillColor;
+    canvasContext.fillText(showWords, textX,textY);
 }
