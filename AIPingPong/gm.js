@@ -5,6 +5,11 @@ var ballY = 75;
 var ballSpeedX = 5;
 var ballSpeedY = 7;
 
+const BRICK_WIDTH = 100;
+const BRICK_HEIGHT = 50;
+const BRICK_COUNT = 8;
+var brickGrid = new Array(BRICK_COUNT);
+
 const PADDLE_WIDTH = 100;
 const PADDLE_THICKNESS = 20;
 const PADDLE_EDGE_DIST = 60;
@@ -25,6 +30,16 @@ function updateMousePosition(evt) {
     paddleX = mouseX - PADDLE_WIDTH;
 }
 
+function brickReset() {
+    for(var i=0;i < BRICK_COUNT;i++) {
+        if(Math.random() < 0.5) {
+            brickGrid[i] = true;
+        } else {
+            brickGrid[i] = false;
+        }
+    }
+}
+
 window.onload = function() {
     canvas = document.getElementById('gameCanvas');
     canvasContext = canvas.getContext('2d');
@@ -33,6 +48,8 @@ window.onload = function() {
     setInterval(upadteAll, 1000/framesPerSec);
 
     canvas.addEventListener('mousemove', updateMousePosition);
+
+    brickReset();
 
 }
 
@@ -87,12 +104,27 @@ function moveAll() {
     }
 }
 
+function drawBricks() {
+    /*colorRect(0,0, BRICK_WIDTH - 2,BRICK_HEIGHT, '#FC4A1A');
+    colorRect(BRICK_WIDTH,0, BRICK_WIDTH - 2,BRICK_HEIGHT, '#FC4A1A');
+    colorRect(BRICK_WIDTH * 2,0, BRICK_WIDTH - 2,BRICK_HEIGHT, '#FC4A1A');
+    colorRect(BRICK_WIDTH * 3,0, BRICK_WIDTH - 2,BRICK_HEIGHT, '#FC4A1A');*/
+
+    for (var i=0;i<BRICK_COUNT;i++) {
+        if (brickGrid[i]) {
+            colorRect(BRICK_WIDTH*i,0, BRICK_WIDTH - 2,BRICK_HEIGHT, '#FC4A1A');
+        }
+    }
+}
+
 function drawAll() {
     colorRect(0,0, canvas.width,canvas.height, '#3AAFA9'); //clean screen
 
     colorCircle(ballX,ballY, 10, '#17252A'); //draw ball
 
     colorRect(paddleX, canvas.height - PADDLE_EDGE_DIST, PADDLE_WIDTH,PADDLE_THICKNESS, '#17252A');
+
+    drawBricks();
 
     colorText(mouseX+","+mouseY, mouseX,mouseY, 'green')
 
